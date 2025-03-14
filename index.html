@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Creator Appreciation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        input,
+        button {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Support Your Favorite Creators</h1>
+    <input type="text" id="creatorSearch" placeholder="Enter creator name or URL">
+    <button onclick="searchCreator()">Search</button>
+    <div id="result"></div>
+    <button onclick="window.location.href='/creator.html'">Creator Dashboard</button>
+    <input type="number" id="amount" placeholder="Amount (e.g., 1)" min="1">
+    <input type="text" id="message" placeholder="Your message">
+    <button onclick="sendMoney()">Send Money</button>
+    <script>
+        function searchCreator() {
+            let search = document.getElementById('creatorSearch').value;
+            document.getElementById('result').innerHTML = `Searching for ${search}...`;
+            // We’ll add API logic later
+        }
+
+        function sendMoney() {
+            let amount = document.getElementById('amount').value;
+            let msg = document.getElementById('message').value;
+            alert(`Sending $${amount} with message: ${msg}`);
+            // Payment logic goes here later
+        }
+    </script>
+</body>
+
+</html>

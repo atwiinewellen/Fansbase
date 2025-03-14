@@ -1,0 +1,23 @@
+{
+  "name": "kajum",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "googleapis": "^146.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "4.0",
+    "paystack": "^2.0.1",
+    "stripe": "^17.7.0"
+  },
+  "description": ""
+}
