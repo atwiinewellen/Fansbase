@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .section {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .eligible {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .not-eligible {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .error {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Creator Dashboard</h1>
+        <div class="section">
+            <h2>Eligibility Status</h2>
+            <div id="eligibility"></div>
+        </div>
+        <div class="section">
+            <h2>Supporter Contributions</h2>
+            <table id="contributions">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Supporter</th>
+                        <th>Amount (KES)</th>
+                    </tr>
+                </thead>
+                <tbody id="contributions-body">
+                    <!-- Populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+        <div class="section">
+            <h2>Update Channel ID</h2>
+            <input type="text" id="channelId" placeholder="e.g., UC_x5XG1OV2P6uZZ5FSM9Ttw">
+            <button onclick="updateChannel()">Update</button>
+        </div>
+        <button onclick="window.location.href='/index.html'">Back to Fan Page</button>
+    </div>
+
+    <script>
+        // Mock creator ID (replace with actual authentication later)
+        const creatorId = "creator123";
+        let creatorChannelId = localStorage.getItem('creatorChannelId') || '';
+
+        async function loadDashboard() {
+            const eligibilityDiv = document.getElementById('eligibility');
+            const contributionsBody = document.getElementById('contributions-body');
+
+            // Load channel ID
+            document.getElementById('channelId').value = creatorChannelId;
+
+            // Check eligibility
+            if (creatorChannelId) {
+                try {
+                    const response = await fetch(`/check-creator/${creatorChannelId}`);
+                    const data = await response.json();
+                    if (data.error) {
+                        eligibilityDiv.innerHTML = `Error: ${data.error}`;
+                        eligibilityDiv.className = 'error';
+                    } else if (data.eligible) {
+                        eligibilityDiv.innerHTML = `You are eligible with ${data.subscribers} subscribers!`;
+                        eligibilityDiv.className = 'eligible';
+                    } else {
+                        eligibilityDiv.innerHTML = `You are not eligible. Subscribers: ${data.subscribers}`;
+                        eligibilityDiv.className = 'not-eligible';
+                    }
+                } catch (error) {
+                    eligibilityDiv.innerHTML = `Error: ${error.message}`;
+                    eligibilityDiv.className = 'error';
+                }
+            } else {
+                eligibilityDiv.innerHTML = 'Please set your YouTube Channel ID.';
+                eligibilityDiv.className = 'error';
+            }
+
+            // Mock contributions (replace with real data once payment is integrated)
+            const mockContributions = [{
+                date: '2025-03-12',
+                supporter: 'Fan1',
+                amount: 10
+            }, {
+                date: '2025-03-11',
+                supporter: 'Fan2',
+                amount: 20
+            }];
+            contributionsBody.innerHTML = '';
+            mockContributions.forEach(contribution => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+          <td>${contribution.date}</td>
+          <td>${contribution.supporter}</td>
+          <td>${contribution.amount}</td>
+        `;
+                contributionsBody.appendChild(row);
+            });
+        }
+
+        function updateChannel() {
+            const channelId = document.getElementById('channelId').value.trim();
+            if (!channelId) {
+                alert('Please enter a YouTube Channel ID.');
+                return;
+            }
+            creatorChannelId = channelId;
+            localStorage.setItem('creatorChannelId', channelId);
+            loadDashboard();
+        }
+
+        // Load dashboard on page load
+        window.onload = loadDashboard;
+    </script>
+</body>
+
+</html>
